@@ -1,9 +1,4 @@
-import {
-    CameraMode,
-    CameraType,
-    CameraView,
-    useCameraPermissions
-} from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRef, useState } from 'react';
 import {
     Button,
@@ -12,17 +7,11 @@ import {
     Text,
     View
 } from 'react-native';
-import { Image } from 'expo-image';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 export default function Index() {
     const [permission, requestPermission] = useCameraPermissions();
     const ref = useRef<CameraView>(null);
-    const [uri, setUri] = useState<string | null>(null);
-    const [mode, setMode] = useState<CameraMode>('picture');
-    const [facing, setFacing] = useState<CameraType>('back');
     const [recording, setRecording] = useState(false);
 
     if (!permission) {
@@ -43,11 +32,6 @@ export default function Index() {
         );
     }
 
-    const takePicture = async () => {
-        const photo = await ref.current?.takePictureAsync();
-        setUri(photo?.uri);
-    };
-
     const recordVideo = async () => {
         if (recording) {
             setRecording(false);
@@ -59,89 +43,19 @@ export default function Index() {
         console.log({ video });
     };
 
-    const toggleMode = () => {
-        setMode((prev) => (prev === 'picture' ? 'video' : 'picture'));
-    };
-
-    const toggleFacing = () => {
-        setFacing((prev) => (prev === 'back' ? 'front' : 'back'));
-    };
-
-    const renderPicture = () => {
-        return (
-            <View>
-                <Image
-                    source={{ uri }}
-                    contentFit="contain"
-                    style={{ width: 300, aspectRatio: 1 }}
-                />
-                <Button
-                    onPress={() => setUri(null)}
-                    title="Take another picture"
-                />
-            </View>
-        );
-    };
-
     const renderCamera = () => {
         return (
             <CameraView
                 style={styles.camera}
                 ref={ref}
-                mode={mode}
-                facing={facing}
+                mode="video"
                 mute={false}
                 responsiveOrientationWhenOrientationLocked
             >
                 <View style={styles.shutterContainer}>
-                    <Pressable onPress={toggleMode}>
-                        {mode === 'picture' ? (
-                            <AntDesign
-                                name="picture"
-                                size={32}
-                                color="white"
-                            />
-                        ) : (
-                            <Feather
-                                name="video"
-                                size={32}
-                                color="white"
-                            />
-                        )}
-                    </Pressable>
-                    <Pressable
-                        onPress={
-                            mode === 'picture'
-                                ? takePicture
-                                : recordVideo
-                        }
-                    >
-                        {({ pressed }) => (
-                            <View
-                                style={[
-                                    styles.shutterBtn,
-                                    {
-                                        opacity: pressed ? 0.5 : 1
-                                    }
-                                ]}
-                            >
-                                <View
-                                    style={[
-                                        styles.shutterBtnInner,
-                                        {
-                                            backgroundColor:
-                                                mode === 'picture'
-                                                    ? 'white'
-                                                    : 'red'
-                                        }
-                                    ]}
-                                />
-                            </View>
-                        )}
-                    </Pressable>
-                    <Pressable onPress={toggleFacing}>
-                        <FontAwesome6
-                            name="rotate-left"
+                    <Pressable onPress={recordVideo}>
+                        <Feather
+                            name="video"
                             size={32}
                             color="white"
                         />
@@ -151,11 +65,7 @@ export default function Index() {
         );
     };
 
-    return (
-        <View style={styles.container}>
-            {uri ? renderPicture() : renderCamera()}
-        </View>
-    );
+    return <View style={styles.container}>{renderCamera()}</View>;
 }
 
 const styles = StyleSheet.create({
@@ -176,22 +86,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         paddingHorizontal: 30
-    },
-    shutterBtn: {
-        backgroundColor: 'transparent',
-        borderWidth: 5,
-        borderColor: 'white',
-        width: 85,
-        height: 85,
-        borderRadius: 45,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    shutterBtnInner: {
-        width: 70,
-        height: 70,
-        borderRadius: 50
     }
 });
