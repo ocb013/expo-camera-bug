@@ -1,5 +1,5 @@
 {
-    "name": "expo-camera",
+    "name": "expo-camera-bug",
     "main": "expo-router/entry",
     "version": "1.0.0",
     "scripts": {
@@ -22,11 +22,11 @@
         "react-dom": "18.3.1",
         "react-native": "0.76.3",
         "react-native-web": "~0.19.6"
-      },
-      "devDependencies": {
+    },
+    "devDependencies": {
         "@babel/core": "^7.20.0",
         "@types/react": "~18.3.12",
         "typescript": "~5.3.3"
-      },
+    },
     "private": true
 }

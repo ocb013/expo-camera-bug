@@ -51,6 +51,9 @@ export default function Index() {
                 mode="video"
                 mute={false}
                 responsiveOrientationWhenOrientationLocked
+                onCameraReady={() => {
+                    console.log(ref.current);
+                }}
             >
                 <View style={styles.shutterContainer}>
                     <Pressable onPress={recordVideo}>
